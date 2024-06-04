@@ -1,0 +1,9 @@
+# .gitignore
+
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.pyw
+*logs/
+*.out
