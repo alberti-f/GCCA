@@ -1,8 +1,9 @@
 import nibabel as nib
 import numpy as np
 import hcp_utils as hcp
-import os, sys, subprocess as sp
-import re
+import os, sys, re
+import subprocess as sp
+
 
 # check for correct number of arguments
 if len(sys.argv) == 1:
@@ -47,6 +48,10 @@ subj_IDs=np.loadtxt(subj_IDs).astype("int32")
 subj=subj_IDs[job_n-1]
 subj_dir=f"{hcp_dir}/{subj}" 
 print("\n", "-"*20, f"\n{subj}")
+
+# Check if out_dir exists, if not create it
+if not os.path.exists(out_dir):
+    os.makedirs(out_dir)
 
 # Find dtseries files for resting state runs
 regex = re.compile('rfMRI_REST[1,2]{1}_[L,R]{2}_Atlas_MSMAll_hp2000_clean.dtseries.nii')
