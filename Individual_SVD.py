@@ -2,7 +2,7 @@
 import numpy as np
 import os, sys, re, time
 from scipy.stats import zscore
-from scipy.sparse.linalg import svds
+from scipy.sparse.linalg import svds, svdvals
 
 # check for correct number of arguments
 if len(sys.argv) == 1:
@@ -55,11 +55,16 @@ if len(svd_files) != 3:
     u = ut.T[:, sorter]
     s = s[sorter]
 
+    exp_var = svdvals(X)**2
+    exp_var = exp_var/np.sum(exp_var)
+    exp_var = exp_var[np.argsort(-exp_var)]
+    
 
     # Save embeddings
     np.save(f"{out_dir}/{subj}.SVD_U.rfMRI_REST_All.npy", u)
     np.save(f"{out_dir}/{subj}.SVD_S.rfMRI_REST_All.npy", s)
     np.save(f"{out_dir}/{subj}.SVD_V.rfMRI_REST_All.npy", v)
+    np.save(f"{out_dir}/{subj}.SVD_exp.rfMRI_REST_All.npy", exp_var)
 
     print(f"\nSVD embeddings computed for {subj}:", 
           f"\n\t{out_dir}/{subj}.SVD_U.rfMRI_REST_All.npy",
