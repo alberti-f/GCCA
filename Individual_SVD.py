@@ -59,7 +59,7 @@ if len(svd_files) != 3:
     exp_var = exp_var/np.sum(exp_var)
     exp_var = exp_var[np.argsort(-exp_var)]
     
-
+    print(f"\nSVD explained variance: {exp_var[:rank]*100}%\nTotal: {np.sum(exp_var[:rank])*100}%")
     # Save embeddings
     np.save(f"{out_dir}/{subj}.SVD_U.rfMRI_REST_All.npy", u)
     np.save(f"{out_dir}/{subj}.SVD_S.rfMRI_REST_All.npy", s)
@@ -69,6 +69,7 @@ if len(svd_files) != 3:
     print(f"\nSVD embeddings computed for {subj}:", 
           f"\n\t{out_dir}/{subj}.SVD_U.rfMRI_REST_All.npy",
           f"\n\t{out_dir}/{subj}.SVD_S.rfMRI_REST_All.npy", 
-          f"\n\t{out_dir}/{subj}.SVD_V.rfMRI_REST_All.npy")
+          f"\n\t{out_dir}/{subj}.SVD_V.rfMRI_REST_All.npy", 
+          f"\n\t{out_dir}/{subj}.SVD_exp.rfMRI_REST_All.npy")
 
     os.remove(f"{out_dir}/{subj}.rfMRI_REST_All_Atlas_MSMAll_hp2000_smooth.npy")
