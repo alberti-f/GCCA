@@ -1,6 +1,6 @@
 import numpy as np
 from scipy import stats, linalg
-from scipy.sparse.linalg import svds
+from scipy.sparse.linalg import svds, svdvals
 from sklearn.preprocessing import normalize
 import os, sys, time
 
@@ -41,6 +41,11 @@ if not os.path.exists(f"{out_dir}/group_SVD_V.npy"):
     _, _, VV = svds(Uall, k=rank)
     VV = np.flip(VV.T, axis=1)
     VV = VV[:, : rank]
+
+    exp_var = svdvals(Uall)**2
+    exp_var = exp_var/np.sum(exp_var)
+    exp_var = exp_var[np.argsort(-exp_var)]
+    exp_var = np.sum(exp_var[:rank])
 
     np.save(f"{out_dir}/group_SVD_V.npy", VV)
 

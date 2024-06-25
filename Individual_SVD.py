@@ -2,7 +2,8 @@
 import numpy as np
 import os, sys, re, time
 from scipy.stats import zscore
-from scipy.sparse.linalg import svds, svdvals
+from scipy.sparse.linalg import svds
+from scipy.linalg import svdvals
 
 # check for correct number of arguments
 if len(sys.argv) == 1:
