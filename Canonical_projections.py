@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import stats, linalg
-from scipy.sparse.linalg import svds, svdvals
+from scipy.sparse.linalg import svds
+from scipy.linalg import svdvals
 from sklearn.preprocessing import normalize
 import os, sys, time
 
@@ -45,9 +46,10 @@ if not os.path.exists(f"{out_dir}/group_SVD_V.npy"):
     exp_var = svdvals(Uall)**2
     exp_var = exp_var/np.sum(exp_var)
     exp_var = exp_var[np.argsort(-exp_var)]
-    exp_var = np.sum(exp_var[:rank])
+    exp_var = exp_var[:rank]
 
     np.save(f"{out_dir}/group_SVD_V.npy", VV)
+    np.save(f"{out_dir}/group_SVD_exp.npy", exp_var)
 
     print("\nGroup SVD embeddings computed successfully\n\t", f"{out_dir}/group_SVD_V.npy")
 
@@ -61,7 +63,6 @@ S = np.load(svd_results.format(subj, "S"))
 V = np.load(svd_results.format(subj, "V"))
 VV = np.load(f"{out_dir}/group_SVD_V.npy")
 X = np.load(f"{out_dir}/{subj}.rfMRI_REST_All_Atlas_MSMAll_hp2000_smooth.npy")
-
 
 
 
@@ -91,3 +92,27 @@ if os.path.exists(f"{out_dir}/{subj}.GCCA.npy"):
     os.remove(f"{out_dir}/{subj}.SVD_U.rfMRI_REST_All.npy")
     os.remove(f"{out_dir}/{subj}.SVD_S.rfMRI_REST_All.npy")
     os.remove(f"{out_dir}/{subj}.SVD_V.rfMRI_REST_All.npy")
+
+
+
+
+# Compute SVD explained variance in group embedding
+if job_n == N:
+    computed_gcca = False
+
+    while not all(computed_gcca):
+        computed_gcca = [os.exists(f"{out_dir}/{id}.GCCA.npy") for id in subj_IDs]
+        time.sleep(30)
+
+    exp_subj = [np.load(f"{out_dir}/{id}.SVD_exp.rfMRI_REST_All.npy") for id in subj_IDs]
+    exp_group = np.load(f"{out_dir}/group_SVD_exp.npy").sum()
+    exp_subj = np.array(exp_subj) * exp_group
+
+    np.save(f"{out_dir}/group_SVD_exp_subj.npy", exp_subj)
+    
+    for id in subj_IDs:
+        if os.path.exists(f"{out_dir}/{id}.SVD_exp.rfMRI_REST_All.npy"):
+            os.remove(f"{out_dir}/{id}.SVD_exp.rfMRI_REST_All.npy")
+
+
+        
