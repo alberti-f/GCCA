@@ -101,7 +101,7 @@ if job_n == N:
     computed_gcca = [False]
 
     while not all(computed_gcca):
-        computed_gcca = [os.exists(f"{out_dir}/{id}.GCCA.npy") for id in subj_IDs]
+        computed_gcca = [os.path.exists(f"{out_dir}/{id}.GCCA.npy") for id in subj_IDs]
         time.sleep(30)
 
     exp_subj = [np.load(f"{out_dir}/{id}.SVD_exp.rfMRI_REST_All.npy") for id in subj_IDs]
