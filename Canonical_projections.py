@@ -98,7 +98,7 @@ if os.path.exists(f"{out_dir}/{subj}.GCCA.npy"):
 
 # Compute SVD explained variance in group embedding
 if job_n == N:
-    computed_gcca = False
+    computed_gcca = [False]
 
     while not all(computed_gcca):
         computed_gcca = [os.exists(f"{out_dir}/{id}.GCCA.npy") for id in subj_IDs]
